@@ -1,5 +1,3 @@
-# PingServer
-Server to process ping requests over UDP and PingClient to send 10 ping requests to the server.
 ---
 layout: page-list
 files:
@@ -8,6 +6,9 @@ files:
 - PingClient.java
 - PingClient.class
 ---
+
+# PingServer
+Server to process ping requests over UDP and PingClient to send 10 ping requests to the server.
 ##### 用法：
 
 1. PingServer
