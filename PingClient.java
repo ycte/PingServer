@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 public class PingClient {
     public static void main(String[] args) throws Exception {
@@ -88,7 +90,8 @@ public class PingClient {
                 Date date1 = new Date(System.currentTimeMillis());
                 String sentence = "PING " + (count[0] - 1) + " " + formatter1.format(date1) + " " + finalPasswd + " ";
                 // Format sendData
-                byte[] sendData = sentence.getBytes();
+                String urlStr = URLEncoder.encode(sentence, "utf-8");
+                byte[] sendData = urlStr.getBytes();
                 System.out.println("sendData: " + sentence);
                 System.out.println("sendData length = " + sendData.length);
                 System.out.println("destination: " + serverIPAddress + ":" + finalServerPort);
@@ -100,6 +103,7 @@ public class PingClient {
                 long timeSrcFlag = 0;
                 try {
                     // Construct and send datagram
+
                     DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverIPAddress, finalServerPort);
                     timeSrcFlag = System.currentTimeMillis();
                     clientSocket.send(sendPacket);
@@ -132,7 +136,8 @@ public class PingClient {
                 System.out.println("delay: " + receiveDelay );
                 // Print data received
                 String sentenceFromServer = new String(receivePacket.getData());
-                System.out.println("From Server: " + sentenceFromServer);
+                String keyWord = URLDecoder.decode(sentenceFromServer, "UTF-8");
+                System.out.println("From Server: " + keyWord);
                 System.out.println("----------------------------------");
                 System.out.println();
                 countFlag++;
@@ -164,5 +169,6 @@ public class PingClient {
         System.out.println("min RTT: " + minRTT);
         System.out.println("average RTT: " + aveRTT);
         System.out.println("loss rate: " + timeOutNum[0] * 1.0 / 10);
+        timer.cancel();
     } // end of main
 }

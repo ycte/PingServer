@@ -11,6 +11,7 @@
 // PingServer.java
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PingServer
@@ -71,11 +72,11 @@ public class PingServer
             // Print the received data, for debugging
             printData(request);
 
-            // Check passwd and generate reply
+            // Check passwd
             String sentence = new String(request.getData());
+            sentence = URLDecoder.decode(sentence, "UTF-8");
             sentence = sentence.replaceFirst("PING", "PINGECHO");
             String[] clientItem = sentence.split(" ");
-            sentence = clientItem[0] + " " + clientItem[1] + " " + clientItem[2] + " " + clientItem[3];
             if (passwd.compareTo(clientItem[3]) == 0) {
                 System.out.println("Passwd correct!");
             }
@@ -94,6 +95,11 @@ public class PingServer
             Thread.sleep((int) (random.nextDouble() * 2 * AVERAGE_DELAY));
 
             // Send reply.
+            // Time in the format of Java currentTimeMill
+            SimpleDateFormat formatter1 = new SimpleDateFormat("HH:mm:ss");
+            Date date1 = new Date(System.currentTimeMillis());
+            sentence = clientItem[0] + " " + clientItem[1] + " " + formatter1.format(date1) + " " + clientItem[3];
+            sentence = URLEncoder.encode(sentence, "utf-8");
             InetAddress clientHost = request.getAddress();
             int clientPort = request.getPort();
             byte[] buf = sentence.getBytes();
@@ -140,6 +146,7 @@ public class PingServer
         // The message data is contained in a single line,
         // so read this line.
         String line = br.readLine();
+        line = URLDecoder.decode(line, "utf-8");
 
         // Print host address and data received from it.
         System.out.println("Received from " +
