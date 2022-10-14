@@ -10,6 +10,8 @@ files:
 # PingServer
 The homework of CNNS in XMU.
 Server to process ping requests over UDP and PingClient to send 10 ping requests to the server.
+
+
 ##### 用法：
 
 1. PingServer
@@ -27,6 +29,18 @@ javac PingClient
 
 java PingClient host port passwd
 ```
+
+
+##### 客户端实现原理
+
+1. 定时器：Timer 与 TimerTask 配合修改变量调控 Ping 操作。
+
+| 变量 | waiting[0]       | sendFlag[i]（第 i 秒时为 true，其他 false） |
+| ---- | ---------------- | ------------------------------------------- |
+| 功能 | 程序主功能的开关 | 控制第 i 次 Ping 操作在第 i 秒执行          |
+
+2. Ping：send、setTimeOut、receive
+
 
 ##### 存在的问题
 
